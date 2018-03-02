@@ -1,0 +1,24 @@
+<h1>Bem vindo!</h1>
+<h2>Para fazer um pedido, faça login abaixo.</h2>
+<form id="login-form" method="post">
+    <table>
+        <tr>
+            <td><b>CPF</b>:</td> 
+            <td><input id="cpf" name="cpf" type="text" placeholder="CPF"></td>
+            <td>
+                <a style="color: red">{{ cpfError }}</a>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Senha</b>:</td>
+            <td><input id="senha" name="senha" type="password"><br></td>
+            <td>
+                <a style="color: red">{{ passError }}</a>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" id="password" name="password">
+    <input type="submit" value="Login"><br>
+</form>
+Caso ainda não tenha um login, você pode se registrar <a href="/signup">aqui</a>.<br>
+Você também pode <a href="/order">fazer um pedido sem login</a>.<br>

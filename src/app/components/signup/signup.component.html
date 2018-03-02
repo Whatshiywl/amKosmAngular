@@ -1,0 +1,38 @@
+<h1>Registrar</h1>
+<h2>Para registrar um login, entre com seu CPF e uma senha abaixo</h2>
+<form id="sign-up-form" method="post">
+    <table>
+        <tr>
+            <td><b>Nome</b>:</td> 
+            <td><input id="name" name="name" type="text" placeholder="Nome">
+            </td>
+            <td>
+                <a style="color: red">{{ nameError }}</a>
+            </td>
+        </tr>
+        <tr>
+            <td><b>CPF</b>:</td> 
+            <td><input id="cpf" name="cpf" type="text" placeholder="CPF">
+            </td>
+            <td>
+                <a style="color: red">{{ cpfError }}</a>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Email</b>:</td>
+            <td><input id="email" name="email" type="text"><br></td>
+            <td>
+                <a style="color: red">{{ emailError }}</a>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Senha</b>:</td>
+            <td><input id="senha" name="senha" type="password"><br></td>
+            <td>
+                <a style="color: red">{{ passError }}</a>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" id="password" name="password">
+    <input type="submit" value="Registrar"><br>
+</form>

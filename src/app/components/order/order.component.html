@@ -1,0 +1,96 @@
+<h1>Novo pedido</h1>
+
+<table cellspacing="10">
+    <colgroup>
+        <col width="600">
+        <col width="50">
+        <col width="25">
+    </colgroup>
+    <tr>
+        <th>Header1</th>
+        <th>Header2</th>
+    </tr>
+    <tr id="add-product-row">
+        <td colspan="2">
+            <input type="button" id="add-product" value="Adicionar produto" style="width: 100%">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <input type="button" id="send-order" value="Enviar pedido" style="width: 100%">
+        </td>
+    </tr>
+</table>
+
+<table cellspacing="10">
+    <colgroup>
+        <col width="60">
+        <col width="100">
+        <col width="50">
+        <col width="200">
+    </colgroup>
+    <tr id="login-row">
+        <td><b>CPF</b></td>
+        <td colspan="1"><input type="text" name="cpf" id="cpf" style="width: 100%"></td>
+        <td><b>Senha</b></td>
+        <td colspan="1"><input type="text" name="pass" id="pass" style="width: 100%"></td>
+    </tr>
+    <tr id="name-row">
+        <td><b>Nome</b></td>
+        <td colspan="3"><input type="text" name="name" id="name" style="width: 100%"></td>
+    </tr>
+    <tr id="name-row">
+        <td><b>Email</b></td>
+        <td colspan="3"><input type="text" name="email" id="email" style="width: 100%"></td>
+    </tr>
+    <tr>
+        <td><b>Linha 1</b></td>
+        <td colspan="3"><input type="text" name="line1" id="line1" placeholder="Avenida Afonso Arinos de Melo Franco, 397" style="width: 100%"></td>
+    </tr>
+    <tr>
+        <td><b>Linha 2</b></td>
+        <td colspan="3"><input type="text" name="line2" id="line2" placeholder="Bloco 1, Apto 1205" style="width: 100%"></td>
+    </tr>
+    <tr>
+        <td><b>Estado</b></td>
+        <td colspan="1">
+            <select type="radio" name="state" id="state" placeholder="RJ" style="width: 100%">
+                <option value="AC">AC</option>
+                <option value="AL">AL</option>
+                <option value="AP">AP</option>
+                <option value="AM">AM</option>
+                <option value="BA">BA</option>
+                <option value="CE">CE</option>
+                <option value="DF">DF</option>
+                <option value="ES">ES</option>
+                <option value="GO">GO</option>
+                <option value="MA">MA</option>
+                <option value="MT">MT</option>
+                <option value="MS">MS</option>
+                <option value="MG">MG</option>
+                <option value="PA">PA</option>
+                <option value="PB">PB</option>
+                <option value="PR">PR</option>
+                <option value="PE">PE</option>
+                <option value="PI">PI</option>
+                <option value="RJ" selected="selected">RJ</option>
+                <option value="RN">RN</option>
+                <option value="RS">RS</option>
+                <option value="RO">RO</option>
+                <option value="RR">RR</option>
+                <option value="SC">SC</option>
+                <option value="SP">SP</option>
+                <option value="SE">SE</option>
+                <option value="TO">TO</option>
+            </select>
+        </td>
+        <td><b>Bairro</b></td>
+        <td colspan="1"><input type="text" name="neigh" id="neigh" placeholder="Barra da Tijuca" style="width: 100%"></td>
+    </tr>
+    <tr>
+        <td><b>CEP</b></td>
+        <td colspan="1"><input type="text" name="code" id="code" placeholder="22631455" style="width: 100%"></td>
+        <td><b>Cidade</b></td>
+        <td colspan="1"><input type="text" name="city" id="city" placeholder="Rio de Janeiro" style="width: 100%"></td>
+    </tr>
+</table>
