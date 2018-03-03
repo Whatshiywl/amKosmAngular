@@ -1,5 +1,5 @@
 <h1>Obrigado por se registrar!</h1>
-<h2>Foi enviado um email de confirmação para <%= email %></h2>
+<h2>Foi enviado um email de confirmação para {{ email }}</h2>
 <p>Caso não veja seu email dentro de 5 minutos, cheque sua caixa de spam.</p>
 <p>Se não estiver na caixa de spam, clique no botão abaixo para enviar o email novamente.</p>
-<input id="resubmit" type="button" value="Re-enviar email de confirmação">
+<input id="resubmit" type="button" value="Re-enviar email de confirmação" (click)="resubmitEmail()">

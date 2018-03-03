@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HttpModule } from '@angular/http';
+import { FormsModule }   from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
@@ -9,6 +11,10 @@ import { SignupComponent } from './components/signup/signup.component';
 import { RegisteredComponent } from './components/registered/registered.component';
 import { OrderComponent } from './components/order/order.component';
 import { ErrorComponent } from './components/error/error.component';
+
+import { HttpService } from './services/http.service';
+import { SessionService } from './services/session.service';
+import { UtilService } from './services/util.service';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -30,9 +36,15 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes, {enableTracing: true})
+    RouterModule.forRoot(appRoutes, {enableTracing: true}),
+    HttpModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [
+    HttpService,
+    SessionService,
+    UtilService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
