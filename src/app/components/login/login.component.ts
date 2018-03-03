@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { HttpService } from '../../services/http.service';
 import { UtilService } from '../../services/util.service';
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private httpService: HttpService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -28,17 +30,16 @@ export class LoginComponent implements OnInit {
 
   onSubmit(cpfID, senhaID, passwordID) {
     this.submitted = true;
-    console.log('SUBMIT1');
     let encrypted = this.utilService.encryptFormWithPassword(senhaID, passwordID);
     if(!encrypted) return false;
     this.httpService.postLogin($(`#${cpfID}`).val(), $(`#${passwordID}`).val()).subscribe(res => {
-      console.log(res);
+      if(res.err) console.error(res.err);
+      else {
+        this.router.navigate(['/order']);
+      }
     }, err => {
       console.error(err);
     });
-    console.log('SUBMIT2');
-    // event.preventDefault();
-    // return false;
   }
 
 }

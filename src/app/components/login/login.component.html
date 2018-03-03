@@ -1,11 +1,11 @@
 <div class="container">
     <h1>Bem vindo!</h1>
     <h2>Para fazer um pedido, faça login abaixo.</h2>
-    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <form (ngSubmit)="onSubmit('cpf', 'senha', 'password')" #loginForm="ngForm">
         <div class="form-group">
             <label for="cpf">CPF</label>
             <input id="cpf" name="cpf" type="text" class="form-control" placeholder="CPF" 
-            [(ngModel)]="model.cpf" #cpfState="ngModel" required minlength="11" maxlength="11">
+            [(ngModel)]="model.cpf" #cpfState="ngModel" required minlength="11" maxlength="11" validCpf>
             <div *ngIf="!cpfState.pristine && !cpfState.valid" class="alert alert-danger">
                 CPF inválido
             </div>

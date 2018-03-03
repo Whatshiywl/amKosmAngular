@@ -15,6 +15,7 @@ import { ErrorComponent } from './components/error/error.component';
 import { HttpService } from './services/http.service';
 import { SessionService } from './services/session.service';
 import { UtilService } from './services/util.service';
+import { InvalidCpfDirective } from './directives/invalid-cpf.directive';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -33,6 +34,7 @@ const appRoutes: Routes = [
     RegisteredComponent,
     OrderComponent,
     ErrorComponent,
+    InvalidCpfDirective,
   ],
   imports: [
     BrowserModule,
