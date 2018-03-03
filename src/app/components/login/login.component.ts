@@ -32,7 +32,9 @@ export class LoginComponent implements OnInit {
     this.submitted = true;
     let encrypted = this.utilService.encryptFormWithPassword(senhaID, passwordID);
     if(!encrypted) return false;
-    this.httpService.postLogin($(`#${cpfID}`).val(), $(`#${passwordID}`).val()).subscribe(res => {
+    let cpf = $(`#${cpfID}`).val();
+    let password = $(`#${passwordID}`).val();
+    this.httpService.postLogin(cpf, password).subscribe(res => {
       if(res.err) console.error(res.err);
       else {
         this.router.navigate(['/order']);
