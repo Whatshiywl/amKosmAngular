@@ -1,38 +1,58 @@
-<h1>Registrar</h1>
-<h2>Para registrar um login, entre com seu CPF e uma senha abaixo</h2>
-<form id="sign-up-form" method="post">
-    <table>
-        <tr>
-            <td><b>Nome</b>:</td> 
-            <td><input id="name" name="name" type="text" placeholder="Nome">
-            </td>
-            <td>
-                <a style="color: red">{{ nameError }}</a>
-            </td>
-        </tr>
-        <tr>
-            <td><b>CPF</b>:</td> 
-            <td><input id="cpf" name="cpf" type="text" placeholder="CPF">
-            </td>
-            <td>
-                <a style="color: red">{{ cpfError }}</a>
-            </td>
-        </tr>
-        <tr>
-            <td><b>Email</b>:</td>
-            <td><input id="email" name="email" type="text"><br></td>
-            <td>
-                <a style="color: red">{{ emailError }}</a>
-            </td>
-        </tr>
-        <tr>
-            <td><b>Senha</b>:</td>
-            <td><input id="senha" name="senha" type="password"><br></td>
-            <td>
-                <a style="color: red">{{ passError }}</a>
-            </td>
-        </tr>
-    </table>
-    <input type="hidden" id="password" name="password">
-    <input type="submit" value="Registrar"><br>
-</form>
+<div class="container">
+    <h1>Registrar</h1>
+    <h2>Para registrar um login, preencha os campos abaixo</h2>
+    <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
+
+        <div class="form-group">
+            <label for="name">Nome</label>
+            <input id="name" name="name" type="text" class="form-control"
+            [(ngModel)]="model.name" #nameState="ngModel" required>
+            <div *ngIf="!nameState.pristine && !nameState.valid" class="alert alert-danger">
+                Nome é obrigatório
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cpf">CPF</label>
+            <input id="cpf" name="cpf" type="text" class="form-control"
+            [(ngModel)]="model.cpf" #cpfState="ngModel" required minlength="11" validCpf>
+            <div *ngIf="!cpfState.pristine && !cpfState.valid" class="alert alert-danger">
+                <div *ngIf="cpfState.errors.required">
+                    CPF é obrigatório
+                </div>
+                <div *ngIf="cpfState.errors.invalid">
+                    CPF inválido
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" class="form-control"
+            [(ngModel)]="model.email" #emailState="ngModel" required email>
+            <div *ngIf="!emailState.pristine && !emailState.valid" class="alert alert-danger">
+                Email inválido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="senha">Senha</label>
+            <input id="senha" name="senha" type="password" class="form-control" 
+            [(ngModel)]="senha" #senhaState="ngModel" required minlength="6">
+            <div *ngIf="!senhaState.pristine && !senhaState.valid" class="alert alert-danger">
+                <div *ngIf="senhaState.errors.required">
+                    Senha é obrigatória
+                </div>
+                <div *ngIf="senhaState.errors.minlength">
+                    Senha precisa ter no mínimo 6 caracteres
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <input type="hidden" id="password" name="password" [(ngModel)]="model.password">
+        </div>
+            
+        <button type="submit" class="btn btn-success" [disabled]="!signupForm.form.valid">Login</button>
+    </form>
+</div>

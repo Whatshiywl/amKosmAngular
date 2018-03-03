@@ -30,4 +30,8 @@ export class HttpService {
     return this.http.post(`http://localhost:9999/api/v1/login`, {cpf: cpf, password: password}).map(res => res.json());
   }
 
+  postUser(name, cpf, email, password) {
+    return this.http.post(`http://localhost:9999/api/v1/user`, {name: name, cpf: cpf, email: email, password: password}).map(res => res.json());
+  }
+
 }

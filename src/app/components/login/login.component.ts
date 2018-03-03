@@ -6,8 +6,6 @@ import { UtilService } from '../../services/util.service';
 
 import { LoginRequest } from '../../models/LoginRequest';
 
-import * as $ from 'jquery';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -16,8 +14,6 @@ import * as $ from 'jquery';
 export class LoginComponent implements OnInit {
 
   model = new LoginRequest("", "");
-
-  submitted = false;
 
   constructor(
     private httpService: HttpService,
@@ -28,13 +24,10 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit(cpfID, senhaID, passwordID) {
-    this.submitted = true;
-    let encrypted = this.utilService.encryptFormWithPassword(senhaID, passwordID);
+  onSubmit() {
+    let encrypted = this.utilService.encryptFormWithPassword("senha", "password");
     if(!encrypted) return false;
-    let cpf = $(`#${cpfID}`).val();
-    let password = $(`#${passwordID}`).val();
-    this.httpService.postLogin(cpf, password).subscribe(res => {
+    this.httpService.postLogin(this.model.cpf, this.model.password).subscribe(res => {
       if(res.err) console.error(res.err);
       else {
         this.router.navigate(['/order']);
