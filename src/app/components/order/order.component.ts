@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { SessionService } from '../../services/session.service';
 import { HttpService } from'../../services/http.service';
+import { FormArray, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+
+import { InvalidCpfDirective } from '../../directives/invalid-cpf.directive';
+import { OrderRequest } from '../../models/OrderRequest';
+import { ProductInfo } from '../../models/ProductInfo';
 
 import * as $ from 'jquery';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-order',
@@ -10,13 +16,61 @@ import * as $ from 'jquery';
   styleUrls: ['./order.component.css']
 })
 export class OrderComponent implements OnInit {
+    loginForm: FormGroup;
+    orderForm: FormGroup;
+
     productFields = 0;
 
     constructor(
         private sessionService: SessionService,
-        private httpService: HttpService
-    ) { }
+        private httpService: HttpService,
+        private formBuilder: FormBuilder
+    ) {
+        this.buildLoginForm();
+        this.buildOrderForm();
+    }
 
+    ngOnInit(){
+        for(let i=0; i<3; i++) {
+            this.addProduct();
+        }
+    }
+
+    buildLoginForm() {
+        this.loginForm = this.formBuilder.group({
+            cpf: ['', [Validators.required, (new InvalidCpfDirective()).invalidCpfValidator()]],
+            name: ['', [Validators.required]],
+            email: ['', [Validators.required, Validators.email]],
+            senha: ['', [Validators.required, Validators.minLength(6)]],
+            password: ['']
+        });
+    }
+
+    buildOrderForm() {
+        this.orderForm = this.formBuilder.group({
+            products: this.formBuilder.array([])
+        });
+    }
+
+    setProducts(products: ProductInfo[]) {
+        let productFormGroups = _.map(products, product => this.formBuilder.group(product));
+        let productFormArray = this.formBuilder.array(productFormGroups);
+        this.orderForm.setControl('products', productFormArray);
+    }
+
+    getProducts(): FormArray {
+        return this.orderForm.get('products') as FormArray;
+    }
+
+    addProduct() {
+        this.getProducts().push(this.formBuilder.group(new ProductInfo('', 0)));
+    }
+
+    removeProduct() {
+        
+    }
+
+    /*
     ngOnInit() {
 
         this.httpService.getAddress(this.sessionService.getUser().getCpf(), this.sessionService.getHash()).subscribe(res => {
@@ -134,5 +188,6 @@ export class OrderComponent implements OnInit {
         });
         this.productFields++;
     }
+    */
 
 }
