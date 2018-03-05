@@ -66,8 +66,8 @@ export class OrderComponent implements OnInit {
         this.getProducts().push(this.formBuilder.group(new ProductInfo('', 0)));
     }
 
-    removeProduct() {
-        
+    removeProduct(i: number) {
+        this.getProducts().removeAt(i);
     }
 
     /*
