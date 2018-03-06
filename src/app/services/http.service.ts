@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, URLSearchParams, ResponseContentType } from '@angular/http';
 
+import { OrderRequest } from '../models/OrderRequest';
+
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -22,8 +24,8 @@ export class HttpService {
     return this.http.post(`http://localhost:9999/api/v1/sign-up-resubmit`, {cpf: cpf}).map(res => res.json());
   }
 
-  postOrder(orderParms) {
-    return this.http.post(`http://localhost:9999/api/v1/order`, orderParms).map(res => res.json());
+  postOrder(cpf, request: OrderRequest) {
+    return this.http.post(`http://localhost:9999/api/v1/order`, request.products).map(res => res.json());
   }
 
   postLogin(cpf, password) {

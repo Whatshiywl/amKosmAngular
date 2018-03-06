@@ -47,7 +47,7 @@
 </div>
 
 <div class="container" style="width: 60%; float: left">
-    <form [formGroup]="orderForm" novalidate>
+    <form (ngSubmit)="onSubmit()" [formGroup]="orderForm" novalidate>
         <div formArrayName="products" class="well well-lg">
             <div *ngFor="let product of getProducts().controls; let i=index" [formGroupName]="i">
                 <div class="form-group">

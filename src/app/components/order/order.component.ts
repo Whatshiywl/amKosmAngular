@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+
 import { SessionService } from '../../services/session.service';
 import { HttpService } from'../../services/http.service';
-import { FormArray, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { InvalidCpfDirective } from '../../directives/invalid-cpf.directive';
 import { OrderRequest } from '../../models/OrderRequest';
@@ -18,8 +19,6 @@ import * as _ from 'lodash';
 export class OrderComponent implements OnInit {
     loginForm: FormGroup;
     orderForm: FormGroup;
-
-    productFields = 0;
 
     constructor(
         private sessionService: SessionService,
@@ -68,6 +67,27 @@ export class OrderComponent implements OnInit {
 
     removeProduct(i: number) {
         this.getProducts().removeAt(i);
+    }
+
+    prepareOrder(): OrderRequest {
+        let formModel = this.orderForm.value;
+
+        let products: ProductInfo[] = formModel.products.map(
+            (product: ProductInfo) => Object.assign({}, product)
+        );
+
+        return new OrderRequest(products);
+    }
+
+    onSubmit() {
+        let request = this.prepareOrder();
+        this.httpService.postOrder('14584367728', request).subscribe(
+            res => {
+                console.log(res);
+            }, err => {
+                console.error(err);
+            }
+        );
     }
 
     /*
