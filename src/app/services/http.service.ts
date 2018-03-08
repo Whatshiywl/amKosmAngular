@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, URLSearchParams, ResponseContentType } from '@angular/http';
 
 import { OrderRequest } from '../models/OrderRequest';
+import { LoginRequest } from '../models/LoginRequest';
 
 import 'rxjs/add/operator/map';
 
@@ -28,8 +29,8 @@ export class HttpService {
     return this.http.post(`http://localhost:9999/api/v1/order`, request.products).map(res => res.json());
   }
 
-  postLogin(cpf, password) {
-    return this.http.post(`http://localhost:9999/api/v1/login`, {cpf: cpf, password: password}).map(res => res.json());
+  postLogin(request: LoginRequest) {
+    return this.http.post(`http://localhost:9999/api/v1/login`, request).map(res => res.json());
   }
 
   postUser(name, cpf, email, password) {

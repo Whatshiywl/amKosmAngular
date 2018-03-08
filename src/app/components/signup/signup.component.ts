@@ -25,16 +25,16 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit() {
-    let encrypted = this.utilService.encryptFormWithPassword("senha", "password");
-    if(!encrypted) return false;
-    this.httpService.postUser(this.model.name, this.model.cpf, this.model.email, this.model.password).subscribe(res => {
-      if(res.err) console.error(res.err);
-      else {
-        this.router.navigate(['/registered']);
-      }
-    }, err => {
-      console.error(err);
-    });
+    // let encrypted = this.utilService.encryptFormWithPassword("senha", "password");
+    // if(!encrypted) return false;
+    // this.httpService.postUser(this.model.name, this.model.cpf, this.model.email, this.model.password).subscribe(res => {
+    //   if(res.err) console.error(res.err);
+    //   else {
+    //     this.router.navigate(['/registered']);
+    //   }
+    // }, err => {
+    //   console.error(err);
+    // });
   }
 
 }

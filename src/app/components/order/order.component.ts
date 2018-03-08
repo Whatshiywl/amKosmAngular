@@ -3,9 +3,11 @@ import { FormArray, FormBuilder, FormGroup, FormControl, Validators } from '@ang
 
 import { SessionService } from '../../services/session.service';
 import { HttpService } from'../../services/http.service';
+import { UtilService } from '../../services/util.service';
 
 import { OrderRequest } from '../../models/OrderRequest';
 import { ProductInfo } from '../../models/ProductInfo';
+import { LoginRequest } from '../../models/LoginRequest';
 
 import { AmValidaors } from '../../AmValidators';
 
@@ -21,9 +23,12 @@ export class OrderComponent implements OnInit {
     loginForm: FormGroup;
     orderForm: FormGroup;
 
+    logged = false;
+
     constructor(
         private sessionService: SessionService,
         private httpService: HttpService,
+        private utilService: UtilService,
         private formBuilder: FormBuilder
     ) {
         this.buildLoginForm();
@@ -100,6 +105,31 @@ export class OrderComponent implements OnInit {
         });
     }
 
+    prepareLogin(): LoginRequest {
+        let cpfValue = this.loginForm.get('cpf').value;
+        let cpf = cpfValue ? cpfValue.toString().replace(/[^\d]+/g,'') : "";
+        let password = this.loginForm.get('password').value;
+        return new LoginRequest(cpf, password);
+    }
+
+    onLogin() {
+        let password = this.utilService.encryptFormWithPassword(this.loginForm.get('senha'), this.loginForm.get('password'));
+        if(!password) return false;
+        let request = this.prepareLogin();
+        this.httpService.postLogin(request).subscribe(res => {
+            console.log(res);
+            if(res.err) console.error(res.err);
+            else {
+                console.log(res);
+                this.sessionService.setUser(res.user);
+                this.sessionService.setHash(res.session);
+                this.logged = true;
+            }
+        }, err => {
+            console.error(err);
+        });
+    }
+
     buildOrderForm() {
         this.orderForm = this.formBuilder.group({
             products: this.formBuilder.array([])
@@ -134,7 +164,7 @@ export class OrderComponent implements OnInit {
         return new OrderRequest(products);
     }
 
-    onSubmit() {
+    onOrderSubmit() {
         let request = this.prepareOrder();
         this.httpService.postOrder('14584367728', request).subscribe(
             res => {
