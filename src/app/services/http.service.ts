@@ -36,4 +36,8 @@ export class HttpService {
     return this.http.post(`http://localhost:9999/api/v1/user`, {name: name, cpf: cpf, email: email, password: password}).map(res => res.json());
   }
 
+  getUserExists(cpf) {
+    return this.http.get(`http://localhost:9999/api/v1/user-exists?cpf=${cpf}`).map(res => res.json());
+  }
+
 }

@@ -36,12 +36,39 @@ export class OrderComponent implements OnInit {
     }
 
     buildLoginForm() {
+        let cpfValidator = new InvalidCpfDirective();
         this.loginForm = this.formBuilder.group({
-            cpf: ['', [Validators.required, (new InvalidCpfDirective()).invalidCpfValidator()]],
-            name: ['', [Validators.required]],
-            email: ['', [Validators.required, Validators.email]],
-            senha: ['', [Validators.required, Validators.minLength(6)]],
+            cpf: ['', [Validators.required, cpfValidator.invalidCpfValidator()]],
+            // name: ['', [Validators.required]],
+            // email: ['', [Validators.email]],
+            // senha: ['', [Validators.required, Validators.minLength(6)]],
             password: ['']
+        });
+
+        this.loginForm.get('cpf').valueChanges.forEach((value: string) => {
+            let cpf = value ? value.toString().replace(/[^\d]+/g,'') : "";
+            if(cpfValidator.isCpfValid(cpf)) {
+                this.httpService.getUserExists(cpf).subscribe(res => {
+                    if(res.err) console.error(res.err);
+                    else {
+                        console.log(res);
+                        if(!res.hasEmail) {
+                            this.loginForm.addControl('email', this.formBuilder.control('', Validators.email));
+                            if(!res.exists) {
+                                this.loginForm.addControl('name', this.formBuilder.control('', Validators.required));
+                            }
+                        }
+                        this.loginForm.addControl('senha', this.formBuilder.control('', [Validators.required, Validators.minLength(6)]));
+                    }
+                }, err => {
+                    console.error(err);
+                });
+            } else {
+                console.warn(cpf);
+                this.loginForm.removeControl('name');
+                this.loginForm.removeControl('email');
+                this.loginForm.removeControl('senha');
+            }
         });
     }
 

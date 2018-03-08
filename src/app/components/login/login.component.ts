@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     this.httpService.postLogin(this.model.cpf, this.model.password).subscribe(res => {
       if(res.err) console.error(res.err);
       else {
-        this.router.navigate(['/order']);
+        // this.router.navigate(['/order']);
       }
     }, err => {
       console.error(err);
