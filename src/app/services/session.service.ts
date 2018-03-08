@@ -5,6 +5,13 @@ import User from '../models/User';
 @Injectable()
 export class SessionService {
 
+  public userExists: {
+    success: boolean,
+    exists: boolean,
+    registered: boolean,
+    err?: any
+  };
+
   private user: User;
   private sessionHash: string;
 

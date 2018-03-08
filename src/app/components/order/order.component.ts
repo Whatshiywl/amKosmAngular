@@ -4,9 +4,10 @@ import { FormArray, FormBuilder, FormGroup, FormControl, Validators } from '@ang
 import { SessionService } from '../../services/session.service';
 import { HttpService } from'../../services/http.service';
 
-import { InvalidCpfDirective } from '../../directives/invalid-cpf.directive';
 import { OrderRequest } from '../../models/OrderRequest';
 import { ProductInfo } from '../../models/ProductInfo';
+
+import { AmValidaors } from '../../AmValidators';
 
 import * as $ from 'jquery';
 import * as _ from 'lodash';
@@ -36,29 +37,58 @@ export class OrderComponent implements OnInit {
     }
 
     buildLoginForm() {
-        let cpfValidator = new InvalidCpfDirective();
         this.loginForm = this.formBuilder.group({
-            cpf: ['', [Validators.required, cpfValidator.invalidCpfValidator()]],
+            cpf: ['', [Validators.required, AmValidaors.invalidCpf()]],
             // name: ['', [Validators.required]],
             // email: ['', [Validators.email]],
             // senha: ['', [Validators.required, Validators.minLength(6)]],
             password: ['']
         });
 
+        let fromObserver = false;
+        const emailObserver = (value: string) => {
+            fromObserver = !fromObserver;
+            if(!fromObserver) return;
+            let senha = this.loginForm.get('senha');
+            if(!senha) return;
+            if(value.length > 0) {
+                senha.setValidators(AmValidaors.invalidPassword(true, 6));
+            } else {
+                senha.setValidators(AmValidaors.invalidPassword(false, 6));
+            }
+            senha.updateValueAndValidity();
+        }
+
+        const senhaObserver = (value: string) => {
+            fromObserver = !fromObserver;
+            if(!fromObserver) return;
+            let email = this.loginForm.get('email');
+            if(!email) return;
+            if(value.length > 0) {
+                email.setValidators(Validators.email);
+            } else {
+                email.setValidators(AmValidaors.invalidEmail());
+            }
+            email.updateValueAndValidity();
+        }
+
         this.loginForm.get('cpf').valueChanges.forEach((value: string) => {
             let cpf = value ? value.toString().replace(/[^\d]+/g,'') : "";
-            if(cpfValidator.isCpfValid(cpf)) {
+            if(AmValidaors.isCpfValid(cpf)) {
                 this.httpService.getUserExists(cpf).subscribe(res => {
+                    this.sessionService.userExists = res;
                     if(res.err) console.error(res.err);
                     else {
                         console.log(res);
-                        if(!res.hasEmail) {
-                            this.loginForm.addControl('email', this.formBuilder.control('', Validators.email));
+                        if(!res.registered) {
+                            this.loginForm.addControl('email', this.formBuilder.control('', AmValidaors.invalidEmail()));
+                            this.loginForm.get('email').valueChanges.forEach(emailObserver);
                             if(!res.exists) {
                                 this.loginForm.addControl('name', this.formBuilder.control('', Validators.required));
                             }
                         }
-                        this.loginForm.addControl('senha', this.formBuilder.control('', [Validators.required, Validators.minLength(6)]));
+                        this.loginForm.addControl('senha', this.formBuilder.control('', AmValidaors.invalidPassword(res.registered, 6)));
+                        this.loginForm.get('senha').valueChanges.forEach(senhaObserver);
                     }
                 }, err => {
                     console.error(err);
