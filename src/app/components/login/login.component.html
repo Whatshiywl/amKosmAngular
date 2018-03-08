@@ -6,7 +6,7 @@
         <div class="form-group">
             <label for="cpf">CPF</label>
             <input id="cpf" name="cpf" type="text" class="form-control"
-            [(ngModel)]="model.cpf" #cpfState="ngModel" required minlength="11" validCpf>
+            [(ngModel)]="model.cpf" #cpfState="ngModel" required minlength="11">
             <div *ngIf="!cpfState.pristine && !cpfState.valid" class="alert alert-danger">
                 CPF inválido
             </div>

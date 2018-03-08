@@ -47,10 +47,10 @@ export class OrderComponent implements OnInit {
 
         let fromObserver = false;
         const emailObserver = (value: string) => {
-            fromObserver = !fromObserver;
-            if(!fromObserver) return;
             let senha = this.loginForm.get('senha');
             if(!senha) return;
+            fromObserver = !fromObserver;
+            if(!fromObserver) return;
             if(value.length > 0) {
                 senha.setValidators(AmValidaors.invalidPassword(true, 6));
             } else {
@@ -60,10 +60,10 @@ export class OrderComponent implements OnInit {
         }
 
         const senhaObserver = (value: string) => {
-            fromObserver = !fromObserver;
-            if(!fromObserver) return;
             let email = this.loginForm.get('email');
             if(!email) return;
+            fromObserver = !fromObserver;
+            if(!fromObserver) return;
             if(value.length > 0) {
                 email.setValidators(Validators.email);
             } else {
@@ -79,7 +79,6 @@ export class OrderComponent implements OnInit {
                     this.sessionService.userExists = res;
                     if(res.err) console.error(res.err);
                     else {
-                        console.log(res);
                         if(!res.registered) {
                             this.loginForm.addControl('email', this.formBuilder.control('', AmValidaors.invalidEmail()));
                             this.loginForm.get('email').valueChanges.forEach(emailObserver);
@@ -94,7 +93,6 @@ export class OrderComponent implements OnInit {
                     console.error(err);
                 });
             } else {
-                console.warn(cpf);
                 this.loginForm.removeControl('name');
                 this.loginForm.removeControl('email');
                 this.loginForm.removeControl('senha');
