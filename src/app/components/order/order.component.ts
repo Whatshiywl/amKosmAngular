@@ -8,6 +8,7 @@ import { UtilService } from '../../services/util.service';
 import { OrderRequest } from '../../models/OrderRequest';
 import { ProductInfo } from '../../models/ProductInfo';
 import { LoginRequest } from '../../models/LoginRequest';
+import { SignupRequest } from '../../models/SignupRequest';
 
 import { AmValidaors } from '../../AmValidators';
 
@@ -24,6 +25,10 @@ export class OrderComponent implements OnInit {
     orderForm: FormGroup;
 
     logged = false;
+    displayLoginButton = false;
+    private readonly LOGINTEXT = "Entrar";
+    private readonly SIGNUPTEXT = "Registrar";
+    loginText: string;
 
     constructor(
         private sessionService: SessionService,
@@ -41,12 +46,18 @@ export class OrderComponent implements OnInit {
         }
     }
 
+    showLoginButton(text: string) {
+        this.loginText = text;
+        this.displayLoginButton = true;
+    }
+
+    hideLoginButton() {
+        this.displayLoginButton = false;
+    }
+
     buildLoginForm() {
         this.loginForm = this.formBuilder.group({
             cpf: ['', [Validators.required, AmValidaors.invalidCpf()]],
-            // name: ['', [Validators.required]],
-            // email: ['', [Validators.email]],
-            // senha: ['', [Validators.required, Validators.minLength(6)]],
             password: ['']
         });
 
@@ -58,8 +69,10 @@ export class OrderComponent implements OnInit {
             if(!fromObserver) return;
             if(value.length > 0) {
                 senha.setValidators(AmValidaors.invalidPassword(true, 6));
+                this.showLoginButton(this.SIGNUPTEXT);
             } else {
                 senha.setValidators(AmValidaors.invalidPassword(false, 6));
+                this.hideLoginButton();
             }
             senha.updateValueAndValidity();
         }
@@ -71,8 +84,10 @@ export class OrderComponent implements OnInit {
             if(!fromObserver) return;
             if(value.length > 0) {
                 email.setValidators(Validators.email);
+                this.showLoginButton(this.SIGNUPTEXT);
             } else {
                 email.setValidators(AmValidaors.invalidEmail());
+                this.hideLoginButton();
             }
             email.updateValueAndValidity();
         }
@@ -90,6 +105,8 @@ export class OrderComponent implements OnInit {
                             if(!res.exists) {
                                 this.loginForm.addControl('name', this.formBuilder.control('', Validators.required));
                             }
+                        } else {
+                            this.showLoginButton(this.LOGINTEXT);
                         }
                         this.loginForm.addControl('senha', this.formBuilder.control('', AmValidaors.invalidPassword(res.registered, 6)));
                         this.loginForm.get('senha').valueChanges.forEach(senhaObserver);
@@ -101,6 +118,7 @@ export class OrderComponent implements OnInit {
                 this.loginForm.removeControl('name');
                 this.loginForm.removeControl('email');
                 this.loginForm.removeControl('senha');
+                this.hideLoginButton();
             }
         });
     }
@@ -112,22 +130,43 @@ export class OrderComponent implements OnInit {
         return new LoginRequest(cpf, password);
     }
 
-    onLogin() {
+    prepareSignup(): SignupRequest {
+        let cpfValue = this.loginForm.get('cpf').value;
+        let cpf = cpfValue ? cpfValue.toString().replace(/[^\d]+/g,'') : "";
+        let password = this.loginForm.get('password').value;
+        let name = this.loginForm.get('name').value;
+        let email = this.loginForm.get('email').value;
+        return new SignupRequest(name, cpf, email, password);
+    }
+
+    onLoginSubmit() {
         let password = this.utilService.encryptFormWithPassword(this.loginForm.get('senha'), this.loginForm.get('password'));
         if(!password) return false;
-        let request = this.prepareLogin();
-        this.httpService.postLogin(request).subscribe(res => {
-            console.log(res);
-            if(res.err) console.error(res.err);
-            else {
-                console.log(res);
-                this.sessionService.setUser(res.user);
-                this.sessionService.setHash(res.session);
-                this.logged = true;
-            }
-        }, err => {
-            console.error(err);
-        });
+        if(this.loginText == this.LOGINTEXT) {
+            let request = this.prepareLogin();
+            this.httpService.postLogin(request).subscribe(res => {
+                if(res.err) console.error(res.err);
+                else {
+                    console.log(res);
+                    this.sessionService.setUser(res.user);
+                    this.sessionService.setHash(res.session);
+                    this.logged = true;
+                }
+            }, err => {
+                console.error(err);
+            });
+        } else if(this.loginText == this.SIGNUPTEXT) {
+            let request = this.prepareSignup();
+            this.httpService.postUser(request).subscribe(res => {
+                if(res.err) console.error(res.err);
+                else {
+                    console.log(res);
+                    this.logged = true;
+                }
+            }, err => {
+                console.error(err);
+            });
+        }
     }
 
     buildOrderForm() {

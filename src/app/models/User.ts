@@ -1,8 +1,14 @@
 export class User {
     public readonly err;
     private cpf;
+    private name;
+    private email;
 
-    constructor(user: {cpf: number}) {
+    constructor(user: {
+        cpf: number,
+        name: string,
+        email: string
+    }) {
         Object.assign(this, user);
     }
 
